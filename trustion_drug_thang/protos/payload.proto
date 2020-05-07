@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+message SimpleSupplyPayload{
+    enum Action {
+        CREATE_USER = 0;
+        DRUG_IMPORT = 1;
+        GET_DRUG = 2;
+        UPDATE_STATUS = 3;
+        UPDATE_LOCATION = 4;
+        EMPLOYEE_IMPORT = 5;
+        COMPANY_IMPORT = 6;
+    }
+    Action action = 1;
+    uint64 timestamp = 2;
+    Create_User create_user = 3;
+    DrugImport drug_import=4;
+    GetDrug get_drug=5;
+    UpdateStatus update_status=6;
+    UpdateLocation update_location=7;
+
+    EmployeeImport employee_import=8;
+    CompanyImport company_import=9;
+}
+
+
+message DrugImport {
+    Role role = 1;
+    enum Role{
+        PATIENT = 0;
+    }
+    string id = 2;
+    string name = 3;
+}
+
+message EmployeeImport {
+    string id = 1;
+    string name = 2;
+    string age = 3;
+    string address = 4;
+    string email = 5;
+    string company_id = 6;
+}
+
+message CompanyImport {
+    string id = 1;
+    string name = 2;
+    string date = 3;
+    string address = 4;
+}
+
+message GetDrug {
+    string id = 1;
+
+}
+message UpdateStatus {
+    Role role = 1;
+    enum Role{
+        PATIENT = 0;
+    }
+    string id = 2;
+    string quantity = 3;
+    string price = 4;
+}
+message UpdateLocation {
+    Role role = 1;
+    enum Role{
+        PATIENT = 0;
+    }
+    string id = 2;
+    string longitude = 3;
+    string latitude = 4;
+}
+
+message Create_User{
+    enum Role{
+        STOKE_KEEPER = 0;
+        NURSE = 1;
+        PATIENT = 2;
+    }
+    string username = 1;
+    Role role = 2;
+}

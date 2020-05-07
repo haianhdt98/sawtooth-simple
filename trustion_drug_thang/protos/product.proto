@@ -1,0 +1,48 @@
+
+syntax = "proto3";
+
+message Product {
+    message Status {
+        uint64 timestamp = 1;
+        string quantity = 2;
+        string price = 3;
+    }
+    message Location {
+        uint64 timestamp = 1;
+        string longitude = 2;
+        string latitude = 3;
+    }
+    string id = 1;
+    string name = 2;
+    repeated Status statuss = 3;
+    repeated Location locations = 4;
+}
+
+message ProductContainer {
+    repeated Product entries = 1;
+}
+
+message Product_employee {
+    string id = 1;
+    string name = 2;
+    string age = 3;
+    string address = 4;
+    string email = 5;
+    string company_id = 6;
+}
+
+message ProductEmployeeContainer {
+    repeated Product_employee entries = 1;
+}
+
+message Product_company {
+    string id = 1;
+    string name = 2;
+    string date = 3;
+    string address = 4;
+    
+}
+
+message ProductCompanyContainer {
+    repeated Product_company entries = 1;
+}
