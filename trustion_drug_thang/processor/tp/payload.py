@@ -44,6 +44,15 @@ class SupplyPayload(object):
                 payload_pb2.SimpleSupplyPayload.UPDATE_LOCATION:
             return self._transaction.update_location
 
+        if self._transaction.HasField('update_company') and \
+            self._transaction.action == \
+                payload_pb2.SimpleSupplyPayload.UPDATE_COMPANY:
+            return self._transaction.update_company
+        if self._transaction.HasField('update_employee') and \
+            self._transaction.action == \
+                payload_pb2.SimpleSupplyPayload.UPDATE_EMPLOYEE:
+            return self._transaction.update_employee
+
         raise InvalidTransaction('Action does not match payload data')
 
     @property

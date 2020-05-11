@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x13protobuf/user.proto\"x\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x12\n\npublic_key\x18\x02 \x01(\t\x12\x18\n\x04role\x18\x03 \x01(\x0e\x32\n.User.Role\"0\n\x04Role\x12\x10\n\x0cSTOKE_KEEPER\x10\x00\x12\t\n\x05NURSE\x10\x01\x12\x0b\n\x07PATIENT\x10\x02\"\'\n\rUserContainer\x12\x16\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x05.Userb\x06proto3'
+  serialized_pb=b'\n\x13protobuf/user.proto\"\x8f\x01\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x12\n\npublic_key\x18\x02 \x01(\t\x12\x18\n\x04role\x18\x03 \x01(\x0e\x32\n.User.Role\"G\n\x04Role\x12\x10\n\x0cSTOKE_KEEPER\x10\x00\x12\t\n\x05NURSE\x10\x01\x12\x0b\n\x07PATIENT\x10\x02\x12\x07\n\x03ORG\x10\x03\x12\x0c\n\x08\x44IRECTOR\x10\x04\"\'\n\rUserContainer\x12\x16\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x05.Userb\x06proto3'
 )
 
 
@@ -41,11 +41,19 @@ _USER_ROLE = _descriptor.EnumDescriptor(
       name='PATIENT', index=2, number=2,
       serialized_options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ORG', index=3, number=3,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='DIRECTOR', index=4, number=4,
+      serialized_options=None,
+      type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=95,
-  serialized_end=143,
+  serialized_start=96,
+  serialized_end=167,
 )
 _sym_db.RegisterEnumDescriptor(_USER_ROLE)
 
@@ -91,8 +99,8 @@ _USER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=23,
-  serialized_end=143,
+  serialized_start=24,
+  serialized_end=167,
 )
 
 
@@ -122,8 +130,8 @@ _USERCONTAINER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=145,
-  serialized_end=184,
+  serialized_start=169,
+  serialized_end=208,
 )
 
 _USER.fields_by_name['role'].enum_type = _USER_ROLE

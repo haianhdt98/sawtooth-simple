@@ -89,12 +89,14 @@ def start_rest_api(host, port, messenger):
     handler = RouteHandler(loop, messenger)
 
     app.router.add_post('/user', handler.create_user)
+    app.router.add_get('/get_transaction/{transaction_id}', handler.get_transaction)
     app.router.add_post('/authentication', handler.authenticate)
-    # app.router.add_get('/get_employee/{employee_id}', handler.get_employee)
-    # app.router.add_get('/get_company/{company_id}', handler.get_company)
+    app.router.add_get('/get_employee_by_id', handler.get_employee_by_id)
+    app.router.add_get('/get_company_by_id', handler.get_company_by_id)
     app.router.add_post('/employee_import', handler.employee_import)
     app.router.add_post('/company_import', handler.company_import)
-
+    app.router.add_put('/update_company', handler.update_company)
+    app.router.add_put('/update_employee', handler.update_employee)
 
 
     app.router.add_post('/trustion_drug/elasticsearch', handler.query_elasticsearch)

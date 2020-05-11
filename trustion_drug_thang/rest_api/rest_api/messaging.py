@@ -38,11 +38,20 @@ from rest_api.transaction_creation import \
 
 from rest_api.transaction_creation import \
     make_get_drug_transaction
-    
+from rest_api.transaction_creation import \
+    make_get_company_transaction
+from rest_api.transaction_creation import \
+    make_get_employee_transaction
+
 from rest_api.transaction_creation import \
     make_update_status_transaction
 from rest_api.transaction_creation import \
     make_update_location_transaction
+
+from rest_api.transaction_creation import \
+    make_update_company_transaction
+from rest_api.transaction_creation import \
+    make_update_employee_transaction
 
 class Messenger(object):
     def __init__(self, validator_url):
@@ -170,6 +179,43 @@ class Messenger(object):
         await self._send_and_wait_for_commit(batch)
 
         return batch
+
+    async def send_get_company_transaction(self,
+                                        private_key,
+                                        timestamp,
+                                        id
+                                        ):
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+
+        batch = make_get_company_transaction(
+            transaction_signer=transaction_signer,
+            batch_signer=self._batch_signer,
+            timestamp=timestamp,
+            id=id
+            )
+        await self._send_and_wait_for_commit(batch)
+
+        return batch
+    
+    async def send_get_employee_transaction(self,
+                                        private_key,
+                                        timestamp,
+                                        id
+                                        ):
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+
+        batch = make_get_employee_transaction(
+            transaction_signer=transaction_signer,
+            batch_signer=self._batch_signer,
+            timestamp=timestamp,
+            id=id
+            )
+        await self._send_and_wait_for_commit(batch)
+
+        return batch
+
     async def send_update_status_transaction(self,
                                           private_key,
                                           timestamp,
@@ -208,6 +254,50 @@ class Messenger(object):
             id=id,
             longitude=longitude,
             latitude=latitude
+            )
+        await self._send_and_wait_for_commit(batch)
+
+        return batch
+
+    async def send_update_company_transaction(self,
+                                          private_key,
+                                          timestamp,
+                                         id,
+                                         address,
+                                         price_IPO
+                                        ):
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+
+        batch = make_update_company_transaction(
+            transaction_signer=transaction_signer,
+            batch_signer=self._batch_signer,
+            timestamp=timestamp,
+            id=id,
+            address=address,
+            price_IPO=price_IPO
+            )
+        await self._send_and_wait_for_commit(batch)
+
+        return batch
+
+    async def send_update_employee_transaction(self,
+                                          private_key,
+                                          timestamp,
+                                         id,
+                                         position,
+                                         salary
+                                        ):
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+
+        batch = make_update_employee_transaction(
+            transaction_signer=transaction_signer,
+            batch_signer=self._batch_signer,
+            timestamp=timestamp,
+            id=id,
+            position=position,
+            salary=salary
             )
         await self._send_and_wait_for_commit(batch)
 

@@ -12,10 +12,22 @@ message Product {
         string longitude = 2;
         string latitude = 3;
     }
+    message Company {
+        uint64 timestamp = 1;
+        string address = 2;
+        string price_IPO = 3;
+    }
+    message Employee {
+        uint64 timestamp = 1;
+        string position = 2;
+        string salary = 3;
+    }
     string id = 1;
     string name = 2;
     repeated Status statuss = 3;
     repeated Location locations = 4;
+    repeated Company companies = 5;
+    repeated Employee employees = 6;
 }
 
 message ProductContainer {

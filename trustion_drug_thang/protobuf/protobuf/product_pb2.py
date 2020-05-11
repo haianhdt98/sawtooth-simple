@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x16protobuf/product.proto\"\xed\x01\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12 \n\x07statuss\x18\x03 \x03(\x0b\x32\x0f.Product.Status\x12$\n\tlocations\x18\x04 \x03(\x0b\x32\x11.Product.Location\x1a<\n\x06Status\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\x12\x10\n\x08quantity\x18\x02 \x01(\t\x12\r\n\x05price\x18\x03 \x01(\t\x1a\x42\n\x08Location\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\x12\x11\n\tlongitude\x18\x02 \x01(\t\x12\x10\n\x08latitude\x18\x03 \x01(\t\"-\n\x10ProductContainer\x12\x19\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x08.Product\"m\n\x10Product_employee\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03\x61ge\x18\x03 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x12\n\ncompany_id\x18\x06 \x01(\t\">\n\x18ProductEmployeeContainer\x12\"\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x11.Product_employee\"J\n\x0fProduct_company\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61te\x18\x03 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\"<\n\x17ProductCompanyContainer\x12!\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x10.Product_companyb\x06proto3'
+  serialized_pb=b'\n\x16protobuf/product.proto\"\xbb\x03\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12 \n\x07statuss\x18\x03 \x03(\x0b\x32\x0f.Product.Status\x12$\n\tlocations\x18\x04 \x03(\x0b\x32\x11.Product.Location\x12#\n\tcompanies\x18\x05 \x03(\x0b\x32\x10.Product.Company\x12$\n\temployees\x18\x06 \x03(\x0b\x32\x11.Product.Employee\x1a<\n\x06Status\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\x12\x10\n\x08quantity\x18\x02 \x01(\t\x12\r\n\x05price\x18\x03 \x01(\t\x1a\x42\n\x08Location\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\x12\x11\n\tlongitude\x18\x02 \x01(\t\x12\x10\n\x08latitude\x18\x03 \x01(\t\x1a@\n\x07\x43ompany\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\x12\x11\n\tprice_IPO\x18\x03 \x01(\t\x1a?\n\x08\x45mployee\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\x12\x10\n\x08position\x18\x02 \x01(\t\x12\x0e\n\x06salary\x18\x03 \x01(\t\"-\n\x10ProductContainer\x12\x19\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x08.Product\"m\n\x10Product_employee\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03\x61ge\x18\x03 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x12\n\ncompany_id\x18\x06 \x01(\t\">\n\x18ProductEmployeeContainer\x12\"\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x11.Product_employee\"J\n\x0fProduct_company\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61te\x18\x03 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\"<\n\x17ProductCompanyContainer\x12!\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x10.Product_companyb\x06proto3'
 )
 
 
@@ -64,8 +64,8 @@ _PRODUCT_STATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=136,
-  serialized_end=196,
+  serialized_start=211,
+  serialized_end=271,
 )
 
 _PRODUCT_LOCATION = _descriptor.Descriptor(
@@ -108,8 +108,96 @@ _PRODUCT_LOCATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=198,
-  serialized_end=264,
+  serialized_start=273,
+  serialized_end=339,
+)
+
+_PRODUCT_COMPANY = _descriptor.Descriptor(
+  name='Company',
+  full_name='Product.Company',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='Product.Company.timestamp', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='address', full_name='Product.Company.address', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='price_IPO', full_name='Product.Company.price_IPO', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=341,
+  serialized_end=405,
+)
+
+_PRODUCT_EMPLOYEE = _descriptor.Descriptor(
+  name='Employee',
+  full_name='Product.Employee',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='Product.Employee.timestamp', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='position', full_name='Product.Employee.position', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='salary', full_name='Product.Employee.salary', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=407,
+  serialized_end=470,
 )
 
 _PRODUCT = _descriptor.Descriptor(
@@ -147,10 +235,24 @@ _PRODUCT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='companies', full_name='Product.companies', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='employees', full_name='Product.employees', index=5,
+      number=6, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_PRODUCT_STATUS, _PRODUCT_LOCATION, ],
+  nested_types=[_PRODUCT_STATUS, _PRODUCT_LOCATION, _PRODUCT_COMPANY, _PRODUCT_EMPLOYEE, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -160,7 +262,7 @@ _PRODUCT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=27,
-  serialized_end=264,
+  serialized_end=470,
 )
 
 
@@ -190,8 +292,8 @@ _PRODUCTCONTAINER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=266,
-  serialized_end=311,
+  serialized_start=472,
+  serialized_end=517,
 )
 
 
@@ -256,8 +358,8 @@ _PRODUCT_EMPLOYEE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=313,
-  serialized_end=422,
+  serialized_start=519,
+  serialized_end=628,
 )
 
 
@@ -287,8 +389,8 @@ _PRODUCTEMPLOYEECONTAINER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=424,
-  serialized_end=486,
+  serialized_start=630,
+  serialized_end=692,
 )
 
 
@@ -339,8 +441,8 @@ _PRODUCT_COMPANY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=488,
-  serialized_end=562,
+  serialized_start=694,
+  serialized_end=768,
 )
 
 
@@ -370,14 +472,18 @@ _PRODUCTCOMPANYCONTAINER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=564,
-  serialized_end=624,
+  serialized_start=770,
+  serialized_end=830,
 )
 
 _PRODUCT_STATUS.containing_type = _PRODUCT
 _PRODUCT_LOCATION.containing_type = _PRODUCT
+_PRODUCT_COMPANY.containing_type = _PRODUCT
+_PRODUCT_EMPLOYEE.containing_type = _PRODUCT
 _PRODUCT.fields_by_name['statuss'].message_type = _PRODUCT_STATUS
 _PRODUCT.fields_by_name['locations'].message_type = _PRODUCT_LOCATION
+_PRODUCT.fields_by_name['companies'].message_type = _PRODUCT_COMPANY
+_PRODUCT.fields_by_name['employees'].message_type = _PRODUCT_EMPLOYEE
 _PRODUCTCONTAINER.fields_by_name['entries'].message_type = _PRODUCT
 _PRODUCTEMPLOYEECONTAINER.fields_by_name['entries'].message_type = _PRODUCT_EMPLOYEE
 _PRODUCTCOMPANYCONTAINER.fields_by_name['entries'].message_type = _PRODUCT_COMPANY
@@ -404,6 +510,20 @@ Product = _reflection.GeneratedProtocolMessageType('Product', (_message.Message,
     # @@protoc_insertion_point(class_scope:Product.Location)
     })
   ,
+
+  'Company' : _reflection.GeneratedProtocolMessageType('Company', (_message.Message,), {
+    'DESCRIPTOR' : _PRODUCT_COMPANY,
+    '__module__' : 'protobuf.product_pb2'
+    # @@protoc_insertion_point(class_scope:Product.Company)
+    })
+  ,
+
+  'Employee' : _reflection.GeneratedProtocolMessageType('Employee', (_message.Message,), {
+    'DESCRIPTOR' : _PRODUCT_EMPLOYEE,
+    '__module__' : 'protobuf.product_pb2'
+    # @@protoc_insertion_point(class_scope:Product.Employee)
+    })
+  ,
   'DESCRIPTOR' : _PRODUCT,
   '__module__' : 'protobuf.product_pb2'
   # @@protoc_insertion_point(class_scope:Product)
@@ -411,6 +531,8 @@ Product = _reflection.GeneratedProtocolMessageType('Product', (_message.Message,
 _sym_db.RegisterMessage(Product)
 _sym_db.RegisterMessage(Product.Status)
 _sym_db.RegisterMessage(Product.Location)
+_sym_db.RegisterMessage(Product.Company)
+_sym_db.RegisterMessage(Product.Employee)
 
 ProductContainer = _reflection.GeneratedProtocolMessageType('ProductContainer', (_message.Message,), {
   'DESCRIPTOR' : _PRODUCTCONTAINER,

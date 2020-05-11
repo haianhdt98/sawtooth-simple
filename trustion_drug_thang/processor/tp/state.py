@@ -154,6 +154,7 @@ class SupplyState(object):
         quantity,
         price
     ):
+
         product_address = addresser.get_product_address(id)
         status = product_pb2.Product.Status(
             timestamp = timestamp,
@@ -194,6 +195,59 @@ class SupplyState(object):
             for product in container.entries:
                 if product.id == id:
                     product.locations.extend([location])
+
+        data = container.SerializeToString()
+        updated_state = {}
+        updated_state[product_address] = data
+        self._context.set_state(updated_state, timeout=self._timeout)
+
+    def update_company(self,
+        timestamp,
+        id,
+        address,
+        price_IPO
+    ):
+        product_address = addresser.get_product_address(id)
+        company = product_pb2.Product.Company(
+            timestamp = timestamp,
+            address = address,
+            price_IPO = price_IPO
+        )
+        container = product_pb2.ProductContainer()
+        state_entries = self._context.get_state(
+            addresses=[product_address], timeout=self._timeout)
+        if state_entries:
+            container.ParseFromString(state_entries[0].data)
+            for product in container.entries:
+                if product.id == id:
+                    product.companies.extend([company])
+
+        data = container.SerializeToString()
+        updated_state = {}
+        updated_state[product_address] = data
+        self._context.set_state(updated_state, timeout=self._timeout)
+
+    def update_employee(self,
+        timestamp,
+        id,
+        position,
+        salary
+    ):
+        
+        product_address = addresser.get_product_address(id)
+        employee = product_pb2.Product.Employee(
+            timestamp = timestamp,
+            position = position,
+            salary = salary
+        )
+        container = product_pb2.ProductContainer()
+        state_entries = self._context.get_state(
+            addresses=[product_address], timeout=self._timeout)
+        if state_entries:
+            container.ParseFromString(state_entries[0].data)
+            for product in container.entries:
+                if product.id == id:
+                    product.employees.extend([employee])
 
         data = container.SerializeToString()
         updated_state = {}

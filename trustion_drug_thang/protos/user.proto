@@ -9,6 +9,8 @@ message User {
         STOKE_KEEPER = 0;
         NURSE = 1;
         PATIENT = 2;
+        ORG = 3;
+        DIRECTOR = 4;
     }
 
     Role role = 3;

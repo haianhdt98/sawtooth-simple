@@ -211,7 +211,85 @@ async def get_drug(
     except:
         return []
 
+async def get_company_by_id(
+          start123,
+          end123,
+          limit123,
+          id
+):
+    body = {
+               "query":{
+                  "bool":{
+                     "must":[]
+                  }
+               }
+            }
+    if limit123 >0:
+        body["size"] = limit123
 
+    body["query"]["bool"]["must"].append(
+        {    
+            "match": {"id":id }
+        }
+    )
+
+    range_body = {"timestamp":{}}
+    if start123 > 0:
+        range_body["timestamp"]["gte"] = start123
+    if end123 > 0:
+        range_body["timestamp"]["lte"] = end123
+    body["query"]["bool"]["must"].append({"range": range_body})
+
+
+    res = es.search(index='trustion_drug_thang_product', body=body)
+    try:
+        return1= []
+        aaa = res['hits']['hits']
+        for aa in aaa:
+            return1.append(aa['_source'])
+        return return1
+    except:
+        return []
+
+async def get_employee_by_id(
+          start123,
+          end123,
+          limit123,
+          id
+):
+    body = {
+               "query":{
+                  "bool":{
+                     "must":[]
+                  }
+               }
+            }
+    if limit123 >0:
+        body["size"] = limit123
+
+    body["query"]["bool"]["must"].append(
+        {    
+            "match": {"id":id }
+        }
+    )
+
+    range_body = {"timestamp":{}}
+    if start123 > 0:
+        range_body["timestamp"]["gte"] = start123
+    if end123 > 0:
+        range_body["timestamp"]["lte"] = end123
+    body["query"]["bool"]["must"].append({"range": range_body})
+
+
+    res = es.search(index='trustion_drug_thang_product', body=body)
+    try:
+        return1= []
+        aaa = res['hits']['hits']
+        for aa in aaa:
+            return1.append(aa['_source'])
+        return return1
+    except:
+        return []
 
 async def update_status(
           transactionIdBlockchain,
@@ -247,6 +325,46 @@ async def update_location(
                   "id":id,
                   "longitude":longitude,
                   "latitude":latitude
+    }
+
+    res = es.search(index='trustion_drug_thang_product', body={"query": {"match": {"id": id}}})
+    id = res['hits']['hits'][0]['_id']
+    res = es.index(index='trustion_drug_thang_product',body=bodyUpdate)
+    return res
+
+async def update_company(
+          transactionIdBlockchain,
+          timestamp,
+          id,
+          address,
+          price_IPO
+):
+    bodyUpdate = {
+                 "transactionIdBlockchain":transactionIdBlockchain,
+                 "timestamp":timestamp,
+                  "id":id,
+                  "address":address,
+                  "price_IPO":price_IPO
+    }
+
+    res = es.search(index='trustion_drug_thang_product', body={"query": {"match": {"id": id}}})
+    id = res['hits']['hits'][0]['_id']
+    res = es.index(index='trustion_drug_thang_product',body=bodyUpdate)
+    return res
+
+async def update_employee(
+          transactionIdBlockchain,
+          timestamp,
+          id,
+          position,
+          salary
+):
+    bodyUpdate = {
+                 "transactionIdBlockchain":transactionIdBlockchain,
+                 "timestamp":timestamp,
+                  "id":id,
+                  "position":position,
+                  "salary":salary
     }
 
     res = es.search(index='trustion_drug_thang_product', body={"query": {"match": {"id": id}}})

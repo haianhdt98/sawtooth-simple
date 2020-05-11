@@ -19,10 +19,14 @@ from rest_api.errors import ApiUnauthorized
 
 # defined in [[elasticsearch.py]]
 from rest_api import elasticsearch
-
+import requests
 
 # generated from **Protobuf**
 from protobuf import user_pb2
+from protobuf import payload_pb2
+
+import base64
+from google.protobuf.json_format import MessageToJson
 
 from jsonschema import validate
 from jsonschema import ValidationError
@@ -35,15 +39,19 @@ role_index_match = {
         "STOKE_KEEPER":"0",
         "NURSE":"1",
         "PATIENT":"2",
-    "00":"nothing"
+        "ORG": "3",
+        "DIRECTOR":'4',
+        "00":"nothing"
 }
 
 role_array= {
         "STOKE_KEEPER",
         "NURSE",
         "PATIENT",
-    ""
+        "ORG",
+        "DIRECTOR"
 }
+
 
 class RouteHandler(object):
     def __init__(self, loop, messenger):
@@ -55,7 +63,7 @@ class RouteHandler(object):
         data_auth = await self._authorize(request)
         role = int(role_index_match[data_auth['role']])
 
-        if role not in [user_pb2.User.PATIENT] :
+        if role not in [user_pb2.User.ORG] :
             return json_response({'status': 'Failure',
                                   'statusCode': 1,
                                   'details': 'Permission denied'})
@@ -74,11 +82,6 @@ class RouteHandler(object):
         validate_types(instance_validate_type, body)
         required_fields = ['id']
         validate_fields(required_fields, body)
-
-
-        id = "CREATE"
-        name = "CREATE"
-
 
         time_11111 = get_time()
         # function params
@@ -129,7 +132,7 @@ class RouteHandler(object):
         data_auth = await self._authorize(request)
         role = int(role_index_match[data_auth['role']])
 
-        if role not in [user_pb2.User.PATIENT] :
+        if role not in [user_pb2.User.DIRECTOR] :
             return json_response({'status': 'Failure',
                                   'statusCode': 1,
                                   'details': 'Permission denied'})
@@ -150,11 +153,6 @@ class RouteHandler(object):
         validate_types(instance_validate_type, body)
         required_fields = ['id']
         validate_fields(required_fields, body)
-
-
-        id = "CREATE"
-        name = "CREATE"
-
 
         time_11111 = get_time()
         # function params
@@ -204,6 +202,7 @@ class RouteHandler(object):
             "age": age,
             "address": address,
             "email":email,
+            "company-id": company_id,
             "status": "Success"
         })
 
@@ -226,18 +225,10 @@ class RouteHandler(object):
         id = "CREATE"
         name = "CREATE"
 
-
-
-
-
-
         time_11111 = get_time()
         # function params
 
-
-
         id = str(uuid.uuid4())
-
 
         name = body.get('name')
 
@@ -248,17 +239,13 @@ class RouteHandler(object):
                                   'statusCode': 3,
                                   'details': ' has been used'})
 
-
-
-
-
         #create transaction
         transactionUnique = await self._messenger.send_drug_import_transaction(
             private_key=private_key,
             timestamp = time_11111,
             id=id,
             name=name
- )
+        )
 
         transactionUniqueId = transactionUnique.transactions[0].header_signature
 
@@ -274,6 +261,7 @@ class RouteHandler(object):
 
         "status": "Success"
         })
+
     async def get_drug(self, request):
         required_fields = ['id']
         for field in required_fields:
@@ -284,19 +272,8 @@ class RouteHandler(object):
                 " 'id' parameter is required")
 
 
-
-
-
-
-
         time_11111 = get_time()
         # function params
-
-
-
-
-
-
 
         #create transaction
         try:
@@ -340,17 +317,166 @@ class RouteHandler(object):
             limit123 = -1
 
 
-
         # save to elasticsearch
         res= await elasticsearch.get_drug(
-                                               start123 = int(start123),
-                                               end123 = int(end123),
-                                               limit123 = int(limit123),
-                                               id=id
-                                              )
-        return json_response(
-            res
-        )
+                                        start123 = int(start123),
+                                        end123 = int(end123),
+                                        limit123 = int(limit123),
+                                        id=id
+                                        )
+        return json_response(res)
+
+
+    async def get_company_by_id(self, request):
+        required_fields = ['id']
+        for field in required_fields:
+            try:
+                id = request.rel_url.query['id']
+            except:
+                raise ApiBadRequest(" 'id' parameter is required")
+
+        time_11111 = get_time()
+        # function params
+
+        #create transaction
+        try:
+            start123321 = request.rel_url.query['start']
+            try:
+                start123321 = datetime.datetime.strptime(start123321,"%y/%m/%d")
+                start123 = start123321.timestamp()
+            except:
+                return json_response({'status': 'Failure',
+                                  'statusCode': 4,
+                                  'details': '"start" must be formatted "year/month/day"'})
+        except:
+            start123 = -1
+
+        try:
+            end123321 = request.rel_url.query['end']
+
+            try:
+                end123321 = datetime.datetime.strptime(end123321,"%y/%m/%d")
+                end123 = end123321.timestamp()
+            except:
+                return json_response({'status': 'Failure',
+                                  'statusCode': 4,
+                                  'details': '"end" must be formatted "year/month/day"'})
+        except:
+            end123 = -1
+
+        try:
+            limit123321 = request.rel_url.query['limit']
+            try:
+                limit123 = int(limit123321)
+                if int(limit123) <= 0:
+                    return json_response({'status': 'Failure',
+                                  'statusCode': 4,
+                                  'details': '"limit" must be greater than 0'})
+            except:
+                return json_response({'status': 'Failure',
+                                  'statusCode': 4,
+                                  'details': '"limit" must be a number'})
+        except:
+            limit123 = -1
+
+
+        # save to elasticsearch
+        res= await elasticsearch.get_company_by_id(
+                                        start123 = int(start123),
+                                        end123 = int(end123),
+                                        limit123 = int(limit123),
+                                        id=id
+                                        )
+        return json_response(res)
+
+    async def get_transaction(self, request):
+        transaction_id = request.match_info.get('transaction_id', '')
+        url = "http://172.17.0.1:8008/transactions/" + str(transaction_id)
+        LOGGER.info(url)
+        # url+=str(transaction_id)
+        response = requests.get(url)
+        if response.status_code == 200:
+            try:
+                transaction_dict = json.loads(response.content)
+            
+                payload_string = transaction_dict['data']['payload']
+                data_model = payload_pb2.SimpleSupplyPayload()
+
+                data_model.ParseFromString(base64.b64decode(payload_string))
+                json_data = json.loads(MessageToJson(data_model, preserving_proto_field_name=True))
+                LOGGER.info(data_model)
+                return json_response({
+                    "data": json_data
+
+                })
+            except Exception as e:
+                LOGGER.info(str(e))
+                return json_response({'data': ""})
+        return json_response({'data': "not"})
+
+    async def get_employee_by_id(self, request):
+        required_fields = ['id']
+        for field in required_fields:
+            try:
+                id = request.rel_url.query['id']
+            except:
+                raise ApiBadRequest(" 'id' parameter is required")
+
+        time_11111 = get_time()
+        # function params
+
+        #create transaction
+        try:
+            start123321 = request.rel_url.query['start']
+            try:
+                start123321 = datetime.datetime.strptime(start123321,"%y/%m/%d")
+                start123 = start123321.timestamp()
+            except:
+                return json_response({'status': 'Failure',
+                                  'statusCode': 4,
+                                  'details': '"start" must be formatted "year/month/day"'})
+        except:
+            start123 = -1
+
+        try:
+            end123321 = request.rel_url.query['end']
+
+            try:
+                end123321 = datetime.datetime.strptime(end123321,"%y/%m/%d")
+                end123 = end123321.timestamp()
+            except:
+                return json_response({'status': 'Failure',
+                                  'statusCode': 4,
+                                  'details': '"end" must be formatted "year/month/day"'})
+        except:
+            end123 = -1
+
+        try:
+            limit123321 = request.rel_url.query['limit']
+            try:
+                limit123 = int(limit123321)
+                if int(limit123) <= 0:
+                    return json_response({'status': 'Failure',
+                                  'statusCode': 4,
+                                  'details': '"limit" must be greater than 0'})
+            except:
+                return json_response({'status': 'Failure',
+                                  'statusCode': 4,
+                                  'details': '"limit" must be a number'})
+        except:
+            limit123 = -1
+
+
+        # save to elasticsearch
+        res= await elasticsearch.get_employee_by_id(
+                                        start123 = int(start123),
+                                        end123 = int(end123),
+                                        limit123 = int(limit123),
+                                        id=id
+                                        )
+        return json_response(res)
+
+
     async def update_status(self, request):
         data_auth = await self._authorize(request)
         role = int(role_index_match[data_auth['role']])
@@ -361,29 +487,25 @@ class RouteHandler(object):
                                   'details': 'Permission denied'})
         private_key = data_auth['private_key']
         body = await decode_request(request)
-        instance_validate_type = {'type': 'object', 'properties': {'id': {'type': 'string'}, 'quantity': {'type': 'string'}, 'price': {'type': 'string'}}}
+        instance_validate_type = {
+            'type': 'object', 
+            'properties': {
+                'id': {'type': 'string'}, 
+                'quantity': {'type': 'string'}, 
+                'price': {'type': 'string'}
+                }
+            }
 
         validate_types(instance_validate_type, body)
         required_fields = ['id','quantity','price']
         validate_fields(required_fields, body)
 
-
-
-
-
-
-
         time_11111 = get_time()
         # function params
-
-
 
         id = body.get('id')
         quantity = body.get('quantity')
         price = body.get('price')
-
-
-
 
         #create transaction
         transactionUnique = await self._messenger.send_update_status_transaction(
@@ -391,11 +513,9 @@ class RouteHandler(object):
             timestamp = time_11111,
             id=id,
             quantity=quantity,
-            price=price
- )
+            price=price)
 
         transactionUniqueId = transactionUnique.transactions[0].header_signature
-
 
           # save to elasticsearch
         res= await elasticsearch.update_status(transactionIdBlockchain = transactionUniqueId,
@@ -405,9 +525,10 @@ class RouteHandler(object):
                                                price=price
                                               )
         return json_response({
-
-        "status": "Success"
+            "status": "Success"
         })
+
+
     async def update_location(self, request):
         data_auth = await self._authorize(request)
         role = int(role_index_match[data_auth['role']])
@@ -424,23 +545,12 @@ class RouteHandler(object):
         required_fields = ['id','longitude','latitude']
         validate_fields(required_fields, body)
 
-
-
-
-
-
-
         time_11111 = get_time()
         # function params
-
-
 
         id = body.get('id')
         longitude = body.get('longitude')
         latitude = body.get('latitude')
-
-
-
 
         #create transaction
         transactionUnique = await self._messenger.send_update_location_transaction(
@@ -448,11 +558,9 @@ class RouteHandler(object):
             timestamp = time_11111,
             id=id,
             longitude=longitude,
-            latitude=latitude
- )
+            latitude=latitude)
 
         transactionUniqueId = transactionUnique.transactions[0].header_signature
-
 
           # save to elasticsearch
         res= await elasticsearch.update_location(transactionIdBlockchain = transactionUniqueId,
@@ -462,8 +570,116 @@ class RouteHandler(object):
                                                latitude=latitude
                                               )
         return json_response({
+            "status": "Success"
+        })
 
-        "status": "Success"
+
+    async def update_company(self, request):
+        data_auth = await self._authorize(request)
+        role = int(role_index_match[data_auth['role']])
+
+        if role not in [user_pb2.User.ORG] :
+            return json_response({'status': 'Failure',
+                                  'statusCode': 1,
+                                  'details': 'Permission denied'})
+        private_key = data_auth['private_key']
+        body = await decode_request(request)
+        instance_validate_type = {
+            'type': 'object', 
+            'properties': {
+                'id': {'type': 'string'}, 
+                'address': {'type': 'string'}, 
+                'price_IPO': {'type': 'string'}
+                }
+            }
+
+        validate_types(instance_validate_type, body)
+        required_fields = ['id','address','price_IPO']
+        validate_fields(required_fields, body)
+
+        time_11111 = get_time()
+        # function params
+
+        id = body.get('id')
+        address = body.get('address')
+        price_IPO = body.get('price_IPO')
+
+        #create transaction
+        transactionUnique = await self._messenger.send_update_company_transaction(
+            private_key=private_key,
+            timestamp = time_11111,
+            id=id,
+            address=address,
+            price_IPO=price_IPO)
+
+        transactionUniqueId = transactionUnique.transactions[0].header_signature
+
+          # save to elasticsearch
+        res= await elasticsearch.update_company(transactionIdBlockchain = transactionUniqueId,
+                                                timestamp = time_11111,
+                                               id=id,
+                                               address=address,
+                                               price_IPO=price_IPO
+                                              )
+        return json_response({
+            "status"    : "Success",
+            "id"        : id,
+            "address"   : address,
+            "price_IPO" : price_IPO
+        })
+    
+    async def update_employee(self, request):
+        data_auth = await self._authorize(request)
+        role = int(role_index_match[data_auth['role']])
+
+        if role not in [user_pb2.User.DIRECTOR] :
+            return json_response({'status': 'Failure',
+                                  'statusCode': 1,
+                                  'details': 'Permission denied'})
+        private_key = data_auth['private_key']
+        body = await decode_request(request)
+        instance_validate_type = {
+            'type': 'object', 
+            'properties': {
+                'id': {'type': 'string'}, 
+                'position': {'type': 'string'}, 
+                'salary': {'type': 'string'}
+                }
+            }
+
+        validate_types(instance_validate_type, body)
+        required_fields = ['id','position','salary']
+        validate_fields(required_fields, body)
+
+        time_11111 = get_time()
+        # function params
+
+        id = body.get('id')
+        position = body.get('position')
+        salary = body.get('salary')
+
+        #create transaction
+        transactionUnique = await self._messenger.send_update_employee_transaction(
+            private_key=private_key,
+            timestamp = time_11111,
+            id=id,
+            position=position,
+            salary=salary)
+
+        transactionUniqueId = transactionUnique.transactions[0].header_signature
+
+          # save to elasticsearch
+        res= await elasticsearch.update_employee(transactionIdBlockchain = transactionUniqueId,
+                                                timestamp = time_11111,
+                                               id=id,
+                                               position=position,
+                                               salary=salary
+                                              )
+        return json_response({
+            "status"    : "Success",
+            "id"        : id,
+            "position"   : position,
+            "salary" : salary
         })
 
     async def create_user(self, request):

@@ -190,6 +190,65 @@ def make_get_drug_transaction(transaction_signer,
         transaction_signer=transaction_signer,
         batch_signer=batch_signer)
 
+def make_get_company_transaction(transaction_signer,
+                                 batch_signer,
+                                 timestamp,
+                                 id
+                                 ):
+
+    user_address = addresser.get_user_address(transaction_signer.get_public_key().as_hex())
+    product_address = addresser.get_product_address(id)
+    inputs = [user_address, product_address]
+    outputs = [product_address]
+
+    action = payload_pb2.GetCompany(
+        id=id
+        )
+
+    payload = payload_pb2.SimpleSupplyPayload(
+        action=payload_pb2.SimpleSupplyPayload.GET_COMPANY,
+        get_company=action,
+        timestamp=timestamp
+    )
+    payload_bytes = payload.SerializeToString()
+
+    return _make_batch(
+        payload_bytes=payload_bytes,
+        inputs=inputs,
+        outputs=outputs,
+        transaction_signer=transaction_signer,
+        batch_signer=batch_signer)
+
+def make_get_employee_transaction(transaction_signer,
+                                 batch_signer,
+                                 timestamp,
+                                 id
+                                 ):
+
+    user_address = addresser.get_user_address(transaction_signer.get_public_key().as_hex())
+    product_address = addresser.get_product_address(id)
+    inputs = [user_address, product_address]
+    outputs = [product_address]
+
+    action = payload_pb2.GetEmployee(
+        id=id
+        )
+
+    payload = payload_pb2.SimpleSupplyPayload(
+        action=payload_pb2.SimpleSupplyPayload.GET_EMPLOYEE,
+        get_employee=action,
+        timestamp=timestamp
+    )
+    payload_bytes = payload.SerializeToString()
+
+    return _make_batch(
+        payload_bytes=payload_bytes,
+        inputs=inputs,
+        outputs=outputs,
+        transaction_signer=transaction_signer,
+        batch_signer=batch_signer)
+
+
 def make_update_status_transaction(transaction_signer,
                                  batch_signer,
                                  timestamp,
@@ -256,6 +315,71 @@ def make_update_location_transaction(transaction_signer,
         transaction_signer=transaction_signer,
         batch_signer=batch_signer)
 
+def make_update_company_transaction(transaction_signer,
+                                 batch_signer,
+                                 timestamp,
+                                 id,
+                                 address,
+                                 price_IPO
+                                 ):
+
+    user_address = addresser.get_user_address(transaction_signer.get_public_key().as_hex())
+    product_address = addresser.get_product_address(id)
+    inputs = [user_address, product_address]
+    outputs = [product_address]
+
+    action = payload_pb2.UpdateCompany(
+        id=id,
+        address=address,
+        price_IPO=price_IPO
+        )
+
+    payload = payload_pb2.SimpleSupplyPayload(
+        action=payload_pb2.SimpleSupplyPayload.UPDATE_COMPANY,
+        update_company=action,
+        timestamp=timestamp
+    )
+    payload_bytes = payload.SerializeToString()
+
+    return _make_batch(
+        payload_bytes=payload_bytes,
+        inputs=inputs,
+        outputs=outputs,
+        transaction_signer=transaction_signer,
+        batch_signer=batch_signer)
+
+def make_update_employee_transaction(transaction_signer,
+                                 batch_signer,
+                                 timestamp,
+                                 id,
+                                 position,
+                                 salary
+                                 ):
+
+    user_address = addresser.get_user_address(transaction_signer.get_public_key().as_hex())
+    product_address = addresser.get_product_address(id)
+    inputs = [user_address, product_address]
+    outputs = [product_address]
+
+    action = payload_pb2.UpdateEmployee(
+        id=id,
+        position=position,
+        salary=salary
+        )
+
+    payload = payload_pb2.SimpleSupplyPayload(
+        action=payload_pb2.SimpleSupplyPayload.UPDATE_EMPLOYEE,
+        update_employee=action,
+        timestamp=timestamp
+    )
+    payload_bytes = payload.SerializeToString()
+
+    return _make_batch(
+        payload_bytes=payload_bytes,
+        inputs=inputs,
+        outputs=outputs,
+        transaction_signer=transaction_signer,
+        batch_signer=batch_signer)
 
 def _make_batch(payload_bytes,
                 inputs,

@@ -21,7 +21,8 @@ RUN pip3 install \
     pycrypto \
     psycopg2-binary \
     jsonschema \
-    ipfsapi
+    ipfsapi \ 
+    requests
 
 
 WORKDIR /project/sawtooth-supply

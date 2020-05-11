@@ -75,6 +75,20 @@ class SupplyHandler(TransactionHandler):
                 payload=payload
                 )
 
+
+        elif payload.action == payload_pb2.SimpleSupplyPayload.UPDATE_COMPANY:
+            _update_company(
+                state=state,
+                public_key=header.signer_public_key,
+                payload=payload
+                )
+        elif payload.action == payload_pb2.SimpleSupplyPayload.UPDATE_EMPLOYEE:
+            _update_employee(
+                state=state,
+                public_key=header.signer_public_key,
+                payload=payload
+                )
+
 def _create_user(state, public_key, payload):
     if state.get_user(public_key):
         raise InvalidTransaction('User with the public key {} already '
@@ -111,6 +125,9 @@ def _company_import(state,public_key, payload):
         raise InvalidTransaction('User with the public key {} does '
                                  'not exist'.format(public_key))
     
+    if user.role not in [user_pb2.User.ORG]:
+        raise InvalidTransaction('Permission denied')
+
     if payload.data.id == '':
         raise InvalidTransaction('No product ID provided')
 
@@ -128,6 +145,9 @@ def _employee_import(state,public_key, payload):
         raise InvalidTransaction('User with the public key {} does '
                                  'not exist'.format(public_key))
     
+    if user.role not in [user_pb2.User.DIRECTOR]:
+        raise InvalidTransaction('Permission denied')
+
     if payload.data.id == '':
         raise InvalidTransaction('No product ID provided')
 
@@ -183,7 +203,45 @@ def _update_location(state, public_key, payload):
         latitude=payload.data.latitude
     )
 
+def _update_company(state, public_key, payload):
+    user = state.get_user(public_key)
+    product = state.get_product(payload.data.id)
+    if product is None:
+        raise InvalidTransaction('product with the id {} does not '
+                                 'exist'.format(payload.data.id))
+    if user is None:
+        raise InvalidTransaction('User with the public key {} does '
+                                 'not exist'.format(public_key))
 
+    if user.role not in [user_pb2.User.ORG]:
+        raise InvalidTransaction('Permission denied')
+
+    state.update_company(
+        timestamp=payload.timestamp,
+        id=payload.data.id,
+        address=payload.data.address,
+        price_IPO=payload.data.price_IPO
+    )
+
+def _update_employee(state, public_key, payload):
+    user = state.get_user(public_key)
+    product = state.get_product(payload.data.id)
+    if product is None:
+        raise InvalidTransaction('product with the id {} does not '
+                                 'exist'.format(payload.data.id))
+    if user is None:
+        raise InvalidTransaction('User with the public key {} does '
+                                 'not exist'.format(public_key))
+
+    if user.role not in [user_pb2.User.DIRECTOR]:
+        raise InvalidTransaction('Permission denied')
+
+    state.update_employee(
+        timestamp=payload.timestamp,
+        id=payload.data.id,
+        position=payload.data.position,
+        salary=payload.data.salary
+    )
 
 def _validate_timestamp(timestamp):
     """Validates that the client submitted timestamp for a transaction is not
